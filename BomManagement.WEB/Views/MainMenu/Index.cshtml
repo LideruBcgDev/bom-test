@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "メインメニュー";
+}
+<div class="row">
+    <div class="col-3 bg-light" style="min-height: 80vh;">
+        <h5 class="mt-3">メニュー</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="#">商品管理</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">受注管理</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">ユーザー管理</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">設定</a></li>
+        </ul>
+    </div>
+    <div class="col-9">
+        <h2 class="mt-3">ようこそ、@User.Identity.Name さん</h2>
+        <p>右側に各種画面が表示されます。</p>
+    </div>
+</div> 
