@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
-namespace BomManagement.WEB.Controllers
+namespace BomManagement.WEB.Controllers.Auth
 {
     [ApiController]
     [Route("[controller]")]

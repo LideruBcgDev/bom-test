@@ -6,8 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
-namespace BomManagement.WEB.Controllers
+namespace BomManagement.WEB.Controllers.Auth
 {
     public class AccountController : Controller
     {

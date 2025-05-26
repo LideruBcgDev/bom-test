@@ -1,0 +1,149 @@
+@{
+    ViewData["Title"] = "部品管理";
+}
+
+@section Styles {
+    <style>
+        .search-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .search-form .form-group {
+            margin-bottom: 0;
+        }
+        .results-container {
+            margin-top: 20px;
+        }
+        .table th {
+            background-color: #f8f9fa;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading i {
+            font-size: 2em;
+            color: #007bff;
+        }
+    </style>
+}
+
+<div class="container-fluid">
+    <h1 class="mb-4">部品管理</h1>
+
+    <div class="search-container">
+        <form id="searchForm" class="search-form">
+            <div class="form-group">
+                <label for="hinmokuCode">部品コード</label>
+                <input type="text" class="form-control" id="hinmokuCode" name="hinmokuCode" placeholder="部品コードを入力">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> 検索
+            </button>
+        </form>
+    </div>
+
+    <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>検索中...</p>
+    </div>
+
+    <div class="results-container">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>部品コード</th>
+                    <th>部品名</th>
+                    <th>単位</th>
+                    <th>単価</th>
+                    <th>作成日時</th>
+                    <th>更新日時</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody">
+                <!-- 検索結果がここに表示されます -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
+                performSearch();
+            });
+
+            function performSearch() {
+                const hinmokuCode = $('#hinmokuCode').val();
+                
+                $('#loading').show();
+                $('#resultsBody').empty();
+
+                $.ajax({
+                    url: '@Url.Action("Search", "Hinmoku")',
+                    type: 'POST',
+                    data: { hinmokuCode: hinmokuCode },
+                    success: function(response) {
+                        if (response.success) {
+                            displayResults(response.data);
+                        } else {
+                            alert(response.message || '検索中にエラーが発生しました。');
+                        }
+                    },
+                    error: function() {
+                        alert('検索中にエラーが発生しました。');
+                    },
+                    complete: function() {
+                        $('#loading').hide();
+                    }
+                });
+            }
+
+            function displayResults(data) {
+                const tbody = $('#resultsBody');
+                tbody.empty();
+
+                if (data.length === 0) {
+                    tbody.append('<tr><td colspan="7" class="text-center">検索結果がありません。</td></tr>');
+                    return;
+                }
+
+                data.forEach(function(item) {
+                    const row = $('<tr>');
+                    row.append(`<td>${item.hinmokuCode}</td>`);
+                    row.append(`<td>${item.hinmokuName}</td>`);
+                    row.append(`<td>${item.unit}</td>`);
+                    row.append(`<td>${item.price.toLocaleString()}円</td>`);
+                    row.append(`<td>${new Date(item.createdDate).toLocaleString()}</td>`);
+                    row.append(`<td>${new Date(item.updatedDate).toLocaleString()}</td>`);
+                    
+                    const actions = $('<td>');
+                    actions.append($('<a>')
+                        .attr('href', '@Url.Action("Edit", "Hinmoku")/' + item.hinmokuCode)
+                        .addClass('btn btn-sm btn-primary me-2')
+                        .html('<i class="fas fa-edit"></i> 編集'));
+                    actions.append($('<button>')
+                        .addClass('btn btn-sm btn-danger')
+                        .html('<i class="fas fa-trash"></i> 削除')
+                        .on('click', function() {
+                            alert('削除機能は現在開発中です。');
+                        }));
+                    
+                    row.append(actions);
+                    tbody.append(row);
+                });
+            }
+        });
+    </script>
+} 

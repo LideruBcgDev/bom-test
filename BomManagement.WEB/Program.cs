@@ -58,9 +58,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
+    .AddRazorOptions(options =>
     {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.AreaViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
+        options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
     });
 
 // JWT認証の設定
@@ -133,8 +134,12 @@ app.UseStaticFiles();
 
 // MVCのルーティングを設定
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+    name: "client",
+    pattern: "client/{controller=Command}/{action=Execute}/{*commandPath}");
+
+app.MapControllerRoute(
+    name: "web",
+    pattern: "{controller=MainMenu}/{action=Index}/{id?}");
 
 // APIエンドポイントのルーティング
 app.MapControllers();

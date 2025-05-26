@@ -51,41 +51,36 @@
             <i class="fas fa-box"></i>
             <h3>部品管理</h3>
             <p>部品情報の登録・編集・検索</p>
-            <a href="#" class="btn btn-primary">開く</a>
+            <a href="@Url.Action("Index", "Hinmoku")" class="btn btn-primary">開く</a>
         </div>
         
         <div class="menu-item">
             <i class="fas fa-sitemap"></i>
             <h3>BOM管理</h3>
             <p>BOMの作成・編集・検索</p>
-            <a href="#" class="btn btn-primary">開く</a>
+            <a href="#" class="btn btn-primary" onclick="showUnderDevelopment('BOM管理')">開く</a>
         </div>
         
         <div class="menu-item">
             <i class="fas fa-file-alt"></i>
             <h3>見積管理</h3>
             <p>見積書の作成・編集・検索</p>
-            <a href="#" class="btn btn-primary">開く</a>
+            <a href="#" class="btn btn-primary" onclick="showUnderDevelopment('見積管理')">開く</a>
         </div>
         
         <div class="menu-item">
             <i class="fas fa-cogs"></i>
             <h3>システム設定</h3>
             <p>システムの各種設定</p>
-            <a href="#" class="btn btn-primary">開く</a>
+            <a href="#" class="btn btn-primary" onclick="showUnderDevelopment('システム設定')">開く</a>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // メニュー項目のクリックイベントハンドラを追加
-        document.querySelectorAll('.menu-item .btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                // TODO: 各メニュー項目の処理を実装
-                alert('この機能は現在開発中です。');
-            });
-        });
+        function showUnderDevelopment(featureName) {
+            alert(`${featureName}機能は現在開発中です。`);
+        }
     </script>
 } 

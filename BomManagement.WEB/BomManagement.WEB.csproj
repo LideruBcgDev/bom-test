@@ -12,6 +12,11 @@
     <Compile Remove="Controllers\JuchuBuhinApiController.cs" />
     <Compile Remove="Controllers\MitsumoriBuhinApiController.cs" />
     <Compile Remove="Controllers\SekkeiBuhinApiController.cs" />
+    <Compile Remove="Controllers\WebMainController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\Client1" />
   </ItemGroup>
 
   <ItemGroup>

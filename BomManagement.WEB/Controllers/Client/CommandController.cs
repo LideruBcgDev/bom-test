@@ -1,19 +1,22 @@
+using BomManagement.FW_WEB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using BomManagement.BOM_MDL;
-using BomManagement.BOM_PRM;
-using BomManagement.FW_WEB;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Reflection;
 
-namespace BomManagement.WEB.Controllers
+namespace BomManagement.WEB.Controllers.Client
 {
+    [Authorize]
     [ApiController]
     [Route("client")]
-    [Authorize]
     public class CommandController : ControllerBase
     {
+        private readonly ILogger<CommandController> _logger;
+
+        public CommandController(ILogger<CommandController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpPost("{*commandPath}")]
         public ActionResult<string> ExecuteCommand(string commandPath, [FromBody] object param)
         {
@@ -56,4 +59,10 @@ namespace BomManagement.WEB.Controllers
             }
         }
     }
+
+    //public class CommandRequest
+    //{
+    //    public string CommandName { get; set; }
+    //    public Dictionary<string, object> Parameters { get; set; }
+    //}
 } 
