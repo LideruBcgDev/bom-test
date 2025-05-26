@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>BomManagement.BOM_MDL</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BaseCommand.vb" />
+    <Compile Remove="CommandBase.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BomManagement.APP\BomManagement.FW_APP.vbproj" />
+    <ProjectReference Include="..\BomManagement.BOM_PRM\BomManagement.BOM_PRM.vbproj" />
+    <ProjectReference Include="..\BomManagement.FW_APP\BomManagement.FW_APP.vbproj" />
+    <ProjectReference Include="..\BomManagement.FW_WEB\BomManagement.FW_WEB.vbproj" />
+    <ProjectReference Include="..\BomManagement.PRM\BomManagement.BOM_PRM.vbproj" />
+  </ItemGroup>
+
+</Project>

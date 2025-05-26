@@ -1,39 +1,32 @@
-@{
-    ViewData["Title"] = "メインメニュー";
-}
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-<div class="menu-container">
-    <div class="menu-panel">
-        <h2>BOM管理システム</h2>
-        <button class="menu-button" onclick="loadContent('hinmoku')">品目</button>
-        <button class="menu-button" onclick="loadContent('sekkei')">設計部品表</button>
-        <button class="menu-button" onclick="loadContent('mitsumori')">見積部品表</button>
-        <button class="menu-button" onclick="loadContent('juchu')">受注部品表</button>
-        <div class="user-info">
-            <p>ログインユーザー: <span id="userName">管理者</span></p>
-        </div>
-        <button class="logout-button" onclick="logout()">ログアウト</button>
-    </div>
-    <div class="main-panel" id="content">
-        <h1>ようこそ、BOM管理システムへ</h1>
-        <p>左のメニューから機能を選択してください。</p>
-    </div>
-</div>
-
-@section Styles {
+namespace BomManagement.WEB.Controllers
+{
+    [ApiController]
+    [Route("web")]
+    [Authorize]
+    public class WebMainController : ControllerBase
+    {
+        [HttpGet("main")]
+        public ContentResult MainMenu()
+        {
+            var html = @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>メインメニュー - BOM管理システム</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-        }
-        .menu-container {
             display: flex;
-            min-height: 100vh;
         }
         .menu-panel {
             width: 200px;
             background-color: #f8f9fa;
+            height: 100vh;
             padding: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
@@ -77,20 +70,35 @@
             background-color: #c82333;
         }
     </style>
-}
+</head>
+<body>
+    <div class='menu-panel'>
+        <h2>BOM管理システム</h2>
+        <button class='menu-button' onclick='loadContent(""hinmoku"")'>品目</button>
+        <button class='menu-button' onclick='loadContent(""sekkei"")'>設計部品表</button>
+        <button class='menu-button' onclick='loadContent(""mitsumori"")'>見積部品表</button>
+        <button class='menu-button' onclick='loadContent(""juchu"")'>受注部品表</button>
+        <div class='user-info'>
+            <p>ログインユーザー: <span id='userName'>管理者</span></p>
+        </div>
+        <button class='logout-button' onclick='logout()'>ログアウト</button>
+    </div>
+    <div class='main-panel' id='content'>
+        <h1>ようこそ、BOM管理システムへ</h1>
+        <p>左のメニューから機能を選択してください。</p>
+    </div>
 
-@section Scripts {
     <script>
         // コンテンツの読み込み
         async function loadContent(type) {
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/Account/Login';
+                window.location.href = '/auth/login';
                 return;
             }
 
             try {
-                const response = await fetch(`/api/client/${type}/search`, {
+                const response = await fetch(`/client/${type}/search`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -110,19 +118,19 @@
         // ログアウト処理
         function logout() {
             localStorage.removeItem('token');
-            window.location.href = '/Account/Login';
+            window.location.href = '/auth/login';
         }
 
         // ユーザー情報の取得
         async function loadUserInfo() {
             const token = localStorage.getItem('token');
             if (!token) {
-                window.location.href = '/Account/Login';
+                window.location.href = '/auth/login';
                 return;
             }
 
             try {
-                const response = await fetch('/api/auth/current', {
+                const response = await fetch('/auth/current', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -140,4 +148,14 @@
         // ページ読み込み時にユーザー情報を取得
         loadUserInfo();
     </script>
+</body>
+</html>";
+
+            return new ContentResult
+            {
+                ContentType = "text/html",
+                Content = html
+            };
+        }
+    }
 } 

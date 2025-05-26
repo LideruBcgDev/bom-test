@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>BomManagement.FW_WEB</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BomManagement.FW_APP\BomManagement.FW_APP.vbproj" />
+  </ItemGroup>
+
+</Project>

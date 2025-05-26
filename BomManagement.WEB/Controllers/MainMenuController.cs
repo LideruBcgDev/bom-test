@@ -6,6 +6,7 @@ namespace BomManagement.WEB.Controllers
     [Authorize]
     public class MainMenuController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View();

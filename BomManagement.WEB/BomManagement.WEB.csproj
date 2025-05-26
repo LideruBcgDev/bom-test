@@ -1,9 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\BaseApiController.cs" />
+    <Compile Remove="Controllers\HinmokuApiController.cs" />
+    <Compile Remove="Controllers\JuchuBuhinApiController.cs" />
+    <Compile Remove="Controllers\MitsumoriBuhinApiController.cs" />
+    <Compile Remove="Controllers\SekkeiBuhinApiController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BomManagement.BOM_MDL\BomManagement.BOM_MDL.vbproj" />
+    <ProjectReference Include="..\BomManagement.BOM_PRM\BomManagement.BOM_PRM.vbproj" />
+    <ProjectReference Include="..\BomManagement.FW_APP\BomManagement.FW_APP.vbproj" />
+    <ProjectReference Include="..\BomManagement.FW_WEB\BomManagement.FW_WEB.vbproj" />
+  </ItemGroup>
 
 </Project>

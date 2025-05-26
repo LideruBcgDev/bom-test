@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>BomManagement.BOM_PRM</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="IParamBase.vb" />
+    <Compile Remove="LoginParam.vb" />
+    <Compile Remove="LoginResult.vb" />
+    <Compile Remove="OParamBase.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BomManagement.FW_APP\BomManagement.FW_APP.vbproj" />
+    <ProjectReference Include="..\BomManagement.FW_WEB\BomManagement.FW_WEB.vbproj" />
+  </ItemGroup>
+
+</Project>
