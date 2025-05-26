@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="IParamBase.vb" />
-    <Compile Remove="LoginParam.vb" />
-    <Compile Remove="LoginResult.vb" />
-    <Compile Remove="OParamBase.vb" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
