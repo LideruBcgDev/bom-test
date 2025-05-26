@@ -3,6 +3,7 @@ Imports System.Security.Claims
 Imports System.Threading.Tasks
 Imports BomManagement.FW_APP
 Imports BomManagement.BOM_PRM
+Imports BomManagement.FW_WIN
 
 Public Class FormLogin
     Inherits Form
@@ -82,4 +83,4 @@ Public Class FormLogin
             Return False
         End Try
     End Function
-End Class 
+End Class

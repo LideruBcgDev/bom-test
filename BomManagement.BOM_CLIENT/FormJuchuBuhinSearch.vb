@@ -2,7 +2,7 @@ Imports System.Windows.Forms
 Imports System.Data
 Imports BomManagement.FW_APP
 Imports BomManagement.BOM_PRM
-
+Imports BomManagement.FW_WIN
 Public Class FormJuchuBuhinSearch
     Inherits Form
 

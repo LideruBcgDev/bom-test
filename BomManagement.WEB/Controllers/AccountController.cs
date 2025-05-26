@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using BomManagement.PRM;
+using BomManagement.BOM_PRM;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BomManagement.WEB.Controllers
 {
@@ -26,7 +27,7 @@ namespace BomManagement.WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string userId, string password, string returnUrl)
+        public async Task<IActionResult> Login(string userId, string password, string returnUrl)
         {
             try
             {
@@ -59,6 +60,20 @@ namespace BomManagement.WEB.Controllers
                         SameSite = SameSiteMode.Strict
                     });
 
+                    // 認証クッキーを設定
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.UserId),
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim("Department", user.Department)
+                    };
+
+                    var identity = new ClaimsIdentity(claims, "Cookies");
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync("Cookies", principal);
+
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -77,6 +92,23 @@ namespace BomManagement.WEB.Controllers
                 ModelState.AddModelError(string.Empty, $"認証処理でエラーが発生しました: {ex.Message}");
                 return View();
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            // 認証クッキーを削除
+            await HttpContext.SignOutAsync("Cookies");
+            
+            // JWTトークンのクッキーを削除
+            Response.Cookies.Delete("token");
+
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
         private string GenerateJwtToken(UserInfo user)

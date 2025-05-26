@@ -1,13 +1,13 @@
 Imports System
 Imports System.Collections.Generic
-'Imports BomManagement.BOM_PRM
+Imports BomManagement.BOM_BOM
 
 Public Class CommandFactory
     Private Shared _instance As CommandFactory
     Private _commandMap As New Dictionary(Of String, Type)
 
     Private Sub New()
-        ' コマンドの登録
+        '' コマンドの登録
         'RegisterCommand("hinmokuapi/search", GetType(HinmokuSearch))
         'RegisterCommand("hinmokuapi/edit", GetType(HinmokuEdit))
     End Sub
@@ -19,12 +19,12 @@ Public Class CommandFactory
         Return _instance
     End Function
 
-    Private Sub RegisterCommand(commandPath As String, commandType As Type)
+    Public Sub RegisterCommand(Of TCommand)(commandPath As String)
         ' CommandBaseを継承しているかチェック
-        If Not IsCommandType(commandType) Then
-            Throw New ArgumentException($"Type {commandType.Name} must inherit from CommandBase")
+        If Not IsCommandType(GetType(TCommand)) Then
+            Throw New ArgumentException($"Type {GetType(TCommand).Name} must inherit from CommandBase")
         End If
-        _commandMap(commandPath) = commandType
+        _commandMap(commandPath) = GetType(TCommand)
     End Sub
 
     Private Function IsCommandType(type As Type) As Boolean

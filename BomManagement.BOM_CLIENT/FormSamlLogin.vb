@@ -4,6 +4,7 @@ Imports System.Diagnostics
 Imports System.Threading.Tasks
 Imports BomManagement.FW_APP
 Imports BomManagement.BOM_PRM
+Imports BomManagement.FW_WIN
 
 Public Class FormSamlLogin
     Inherits Form
@@ -57,4 +58,4 @@ Public Class FormSamlLogin
             MessageBox.Show($"SAML認証に失敗しました。{vbCrLf}{ex.Message}", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-End Class 
+End Class

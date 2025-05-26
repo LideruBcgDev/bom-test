@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using BomManagement.PRM;
+using BomManagement.BOM_PRM;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;

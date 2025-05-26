@@ -1,10 +1,11 @@
 Imports System.Data
 Imports BomManagement.BOM_PRM
+Imports BomManagement.FW_WEB
 
 Public Class JuchuBuhinSearch
-    Inherits BaseSearch(Of JuchuBuhinSearchParam, JuchuBuhinSearchResult)
+    Inherits CommandBase(Of JuchuBuhinSearchParam, JuchuBuhinSearchResult)
 
-    Protected Overrides Function CreateDataTable() As DataTable
+    Protected Overrides Function ExecuteCore(param As JuchuBuhinSearchParam) As JuchuBuhinSearchResult
         Dim dt As New DataTable()
         dt.Columns.Add("JuchuCode")
         dt.Columns.Add("JuchuName")
@@ -12,18 +13,18 @@ Public Class JuchuBuhinSearch
         dt.Columns.Add("DeliveryDate", GetType(DateTime))
         dt.Rows.Add("J001", "受注部品表1", DateTime.Now, DateTime.Now.AddDays(7))
         dt.Rows.Add("J002", "受注部品表2", DateTime.Now, DateTime.Now.AddDays(14))
-        Return dt
+
+        '' 検索条件の適用
+        'If Not String.IsNullOrEmpty(param.HinmokuCode) Then
+        '    dt.DefaultView.RowFilter = $"HinmokuCode LIKE '%{param.HinmokuCode}%'"
+        'End If
+
+        ' 結果の作成
+        Dim result As New JuchuBuhinSearchResult()
+        result.ResultTable = dt.DefaultView.ToTable()
+        result.Success = True
+
+        Return result
     End Function
 
-    Protected Overrides Function GetFilterColumn() As String
-        Return "JuchuCode"
-    End Function
-
-    Protected Overrides Function GetFilterValue(param As JuchuBuhinSearchParam) As String
-        Return param.JuchuCode
-    End Function
-
-    Protected Overrides Function CreateResult(dt As DataTable) As JuchuBuhinSearchResult
-        Return New JuchuBuhinSearchResult With {.ResultTable = dt}
-    End Function
 End Class 

@@ -6,6 +6,18 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using BomManagement.FW_WEB;
+using BomManagement.BOM_MDL;
+
+// コマンドの初期化クラスを登録
+CommandInitializer.RegisterInitializer(new BOMCommandInitializer());
+// 将来的に他のドメインの初期化クラスも登録
+// CommandInitializer.RegisterInitializer(new PLMCommandInitializer());
+// CommandInitializer.RegisterInitializer(new DRAWCommandInitializer());
+// CommandInitializer.RegisterInitializer(new CADCommandInitializer());
+
+// コマンドの初期化を実行
+CommandInitializer.Initialize();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,10 +66,23 @@ builder.Services.AddControllersWithViews()
 // JWT認証の設定
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = "Cookies";
+    options.DefaultChallengeScheme = "Cookies";
+    options.DefaultSignInScheme = "Cookies";
 })
-.AddJwtBearer(options =>
+.AddCookie("Cookies", options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.Cookie.Name = "BomManagement.Auth";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+})
+.AddJwtBearer("Bearer", options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {

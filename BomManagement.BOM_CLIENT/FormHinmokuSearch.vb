@@ -1,7 +1,7 @@
 Imports System.Windows.Forms
 Imports BomManagement.BOM_PRM
 Imports BomManagement.FW_APP
-
+Imports BomManagement.FW_WIN
 Public Class FormHinmokuSearch
     Inherits Form
 
@@ -37,7 +37,7 @@ Public Class FormHinmokuSearch
     Private Async Sub BtnSearch_Click(sender As Object, e As EventArgs)
         Dim param As New HinmokuSearchParam With {.HinmokuCode = txtHinmoku.Text}
         Try
-            Dim result = Await HttpClientWrapper.PostAsync(Of HinmokuSearchResult)("hinmokuapi/search", param)
+            Dim result = Await HttpClientWrapper.PostAsync(Of HinmokuSearchResult)(ApiPathConstants.HINMOKU_SEARCH, param)
             dgvResult.DataSource = result.ResultTable
         Catch ex As Exception
             MessageBox.Show("検索に失敗しました: " & ex.Message)

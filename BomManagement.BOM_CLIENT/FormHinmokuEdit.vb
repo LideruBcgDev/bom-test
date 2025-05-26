@@ -1,7 +1,7 @@
 Imports System.Data
 Imports BomManagement.BOM_PRM
 Imports BomManagement.FW_APP
-
+Imports BomManagement.FW_WIN
 Public Class FormHinmokuEdit
     Inherits Form
 
@@ -63,7 +63,7 @@ Public Class FormHinmokuEdit
             param.Price = If(String.IsNullOrEmpty(txtPrice.Text), 0, Decimal.Parse(txtPrice.Text))
 
             ' Web APIを使用して登録処理を実行
-            Dim result = Await HttpClientWrapper.PostAsync(Of Object)("hinmokuapi/edit", param)
+            Dim result = Await HttpClientWrapper.PostAsync(Of Object)(ApiPathConstants.HINMOKU_EDIT, param)
 
             MessageBox.Show("登録が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Me.DialogResult = DialogResult.OK

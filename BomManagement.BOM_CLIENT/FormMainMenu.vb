@@ -1,5 +1,6 @@
 Imports System.Windows.Forms
 Imports BomManagement.FW_APP
+Imports BomManagement.FW_WIN
 
 Public Class FormMainMenu
     Inherits Form

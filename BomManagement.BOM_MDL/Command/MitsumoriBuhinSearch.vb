@@ -1,10 +1,11 @@
 Imports System.Data
 Imports BomManagement.BOM_PRM
+Imports BomManagement.FW_WEB
 
 Public Class MitsumoriBuhinSearch
-    Inherits BaseSearch(Of MitsumoriBuhinSearchParam, MitsumoriBuhinSearchResult)
+    Inherits CommandBase(Of MitsumoriBuhinSearchParam, MitsumoriBuhinSearchResult)
 
-    Protected Overrides Function CreateDataTable() As DataTable
+    Protected Overrides Function ExecuteCore(param As MitsumoriBuhinSearchParam) As MitsumoriBuhinSearchResult
         Dim dt As New DataTable()
         dt.Columns.Add("MitsumoriCode")
         dt.Columns.Add("MitsumoriName")
@@ -12,18 +13,18 @@ Public Class MitsumoriBuhinSearch
         dt.Columns.Add("UpdateDate", GetType(DateTime))
         dt.Rows.Add("M001", "見積部品表1", 10000, DateTime.Now)
         dt.Rows.Add("M002", "見積部品表2", 20000, DateTime.Now)
-        Return dt
+
+        '' 検索条件の適用
+        'If Not String.IsNullOrEmpty(param.HinmokuCode) Then
+        '    dt.DefaultView.RowFilter = $"HinmokuCode LIKE '%{param.HinmokuCode}%'"
+        'End If
+
+        ' 結果の作成
+        Dim result As New MitsumoriBuhinSearchResult()
+        result.ResultTable = dt.DefaultView.ToTable()
+        result.Success = True
+
+        Return result
     End Function
 
-    Protected Overrides Function GetFilterColumn() As String
-        Return "MitsumoriCode"
-    End Function
-
-    Protected Overrides Function GetFilterValue(param As MitsumoriBuhinSearchParam) As String
-        Return param.MitsumoriCode
-    End Function
-
-    Protected Overrides Function CreateResult(dt As DataTable) As MitsumoriBuhinSearchResult
-        Return New MitsumoriBuhinSearchResult With {.ResultTable = dt}
-    End Function
 End Class 

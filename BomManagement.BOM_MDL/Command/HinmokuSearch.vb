@@ -1,10 +1,11 @@
 Imports System.Data
 Imports BomManagement.BOM_PRM
+Imports BomManagement.FW_WEB
 
 Public Class HinmokuSearch
-    Inherits BaseSearch(Of HinmokuSearchParam, HinmokuSearchResult)
+    Inherits CommandBase(Of HinmokuSearchParam, HinmokuSearchResult)
 
-    Protected Overrides Function Execute(param As HinmokuSearchParam) As HinmokuSearchResult
+    Protected Overrides Function ExecuteCore(param As HinmokuSearchParam) As HinmokuSearchResult
         ' データテーブルの作成
         Dim dt As New DataTable()
         dt.Columns.Add("HinmokuCode", GetType(String))
