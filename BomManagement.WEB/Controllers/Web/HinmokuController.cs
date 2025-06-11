@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using BomManagement.BOM_MDL;
 using System.Collections.Generic;
 using System;
+using System.Data;
 
 namespace BomManagement.WEB.Controllers
 {
@@ -18,39 +19,41 @@ namespace BomManagement.WEB.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                var command = CommandFactory.GetInstance().CreateCommand("Hinmoku/Index");
+                var result = command.Execute();
+                
+                if (result is DataTable dt)
+                {
+                    ViewBag.SearchResult = dt;
+                }
+                
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "部品一覧の表示でエラーが発生しました");
+                return View("Error");
+            }
         }
 
         [HttpPost]
-        public IActionResult Search(string hinmokuCode)
+        public IActionResult Search(HinmokuSearchParam param)
         {
             try
             {
-                // TODO: 実際のデータベース検索処理を実装
-                // 仮のデータを返す
-                var results = new List<HinmokuInfo>
-                {
-                    new HinmokuInfo
-                    {
-                        HinmokuCode = "A001",
-                        HinmokuName = "テスト部品1",
-                        Unit = "個",
-                        Price = 1000,
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now
-                    },
-                    new HinmokuInfo
-                    {
-                        HinmokuCode = "A002",
-                        HinmokuName = "テスト部品2",
-                        Unit = "個",
-                        Price = 2000,
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now
-                    }
-                };
+                var command = CommandFactory.GetInstance().CreateCommand("Hinmoku/Search");
+                command.Parameters = param;
+                var result = command.Execute();
 
-                return Json(new { success = true, data = results });
+                if (result is DataTable dt)
+                {
+                    ViewBag.SearchResult = dt;
+                    ViewBag.SearchParam = param;
+                }
+
+                return Json(new { success = true, data = result });
             }
             catch (Exception ex)
             {
@@ -63,19 +66,16 @@ namespace BomManagement.WEB.Controllers
         {
             try
             {
-                // TODO: 実際のデータベースから部品情報を取得
-                // 仮のデータを返す
-                var hinmoku = new HinmokuInfo
-                {
-                    HinmokuCode = id,
-                    HinmokuName = "テスト部品" + id,
-                    Unit = "個",
-                    Price = 1000,
-                    CreatedDate = DateTime.Now,
-                    UpdatedDate = DateTime.Now
-                };
+                var command = CommandFactory.GetInstance().CreateCommand("Hinmoku/Edit");
+                command.Parameters = new { Id = id };
+                var result = command.Execute();
 
-                return View(hinmoku);
+                if (result is HinmokuInfo hinmoku)
+                {
+                    return View(hinmoku);
+                }
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -95,9 +95,11 @@ namespace BomManagement.WEB.Controllers
                     return View(model);
                 }
 
-                // TODO: 実際のデータベース更新処理を実装
-                _logger.LogInformation($"部品情報を更新しました: {model.HinmokuCode}");
+                var command = CommandFactory.GetInstance().CreateCommand("Hinmoku/Update");
+                command.Parameters = model;
+                command.Execute();
 
+                _logger.LogInformation($"部品情報を更新しました: {model.HinmokuCode}");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 @model BomManagement.BOM_MDL.HinmokuInfo
 @{
     ViewData["Title"] = "部品編集";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section Styles {
@@ -32,55 +33,58 @@
 
     <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
-    <form asp-action="Edit" asp-controller="Hinmoku" method="post">
-        <input type="hidden" asp-for="HinmokuCode" />
-        <input type="hidden" asp-for="CreatedDate" />
-        <input type="hidden" asp-for="UpdatedDate" />
+    @using (Html.BeginForm("Edit", "Hinmoku", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.HinmokuCode)
+        @Html.HiddenFor(m => m.CreatedDate)
+        @Html.HiddenFor(m => m.UpdatedDate)
 
         <div class="form-group">
-            <label asp-for="HinmokuCode" class="form-label">部品コード</label>
-            <input asp-for="HinmokuCode" class="form-control" readonly />
+            @Html.LabelFor(m => m.HinmokuCode, "部品コード", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.HinmokuCode, new { @class = "form-control", @readonly = "readonly" })
         </div>
 
         <div class="form-group">
-            <label asp-for="HinmokuName" class="form-label">部品名</label>
-            <input asp-for="HinmokuName" class="form-control" />
-            <span asp-validation-for="HinmokuName" class="text-danger"></span>
+            @Html.LabelFor(m => m.HinmokuName, "部品名", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.HinmokuName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.HinmokuName, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            <label asp-for="Unit" class="form-label">単位</label>
-            <input asp-for="Unit" class="form-control" />
-            <span asp-validation-for="Unit" class="text-danger"></span>
+            @Html.LabelFor(m => m.Unit, "単位", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Unit, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Unit, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            <label asp-for="Price" class="form-label">単価</label>
-            <input asp-for="Price" class="form-control" type="number" step="0.01" />
-            <span asp-validation-for="Price" class="text-danger"></span>
+            @Html.LabelFor(m => m.Price, "単価", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Price, "{0:N2}", new { @class = "form-control", type = "number", step = "0.01" })
+            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
             <label class="form-label">作成日時</label>
-            <input type="text" class="form-control" value="@Model.CreatedDate.ToString("yyyy/MM/dd HH:mm:ss")" readonly />
+            @Html.TextBox("CreatedDateDisplay", Model.CreatedDate.ToString("yyyy/MM/dd HH:mm:ss"), new { @class = "form-control", @readonly = "readonly" })
         </div>
 
         <div class="form-group">
             <label class="form-label">更新日時</label>
-            <input type="text" class="form-control" value="@Model.UpdatedDate.ToString("yyyy/MM/dd HH:mm:ss")" readonly />
+            @Html.TextBox("UpdatedDateDisplay", Model.UpdatedDate.ToString("yyyy/MM/dd HH:mm:ss"), new { @class = "form-control", @readonly = "readonly" })
         </div>
 
         <div class="btn-container">
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> 保存
             </button>
-            <a href="@Url.Action("Index", "Hinmoku")" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> 戻る
-            </a>
+            @Html.ActionLink("戻る", "Index", "Hinmoku", null, new { @class = "btn btn-secondary" })
         </div>
-    </form>
+    }
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    @* WebFormsのコントロールを埋め込む *@
+    @Html.RenderPartial("~/Controls/HinmokuEdit.ascx", Model)
 } 
